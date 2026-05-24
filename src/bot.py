@@ -23,9 +23,10 @@ def main():
     print("✍️ جاري كتابة القصة...")
     content = generate()
     print("✅ تم إنشاء القصة")
+    print("📝 النص الخام:", content[:200])
 
     msg = format_message(content)
-    print("📤 جاري النشر في القناة...")
+    print("📤 جاري النشر... طول الرسالة:", len(msg), "حرف")
 
     result = send(cid, msg)
     if result.get("ok"):
