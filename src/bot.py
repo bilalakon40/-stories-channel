@@ -4,21 +4,13 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from config import CHANNEL_ID
 from generate import generate
-from post import send, format_message, get_channel_id
+from post import send
 
 def main():
     print("📖 وكيل حكايات وعبر يعمل...")
 
     cid = CHANNEL_ID
-    if cid and not cid.startswith("@"):
-        found = get_channel_id()
-        if found:
-            cid = found
-            print(f"📢 تم العثور على القناة: {cid}")
-        else:
-            print("⚠️ لم يتم العثور على القناة من getUpdates، استخدم CHANNEL_ID الموجود")
-    else:
-        print(f"📢 القناة: {cid}")
+    print(f"📢 القناة: {cid}")
 
     print("✍️ جاري كتابة القصة...")
     content = generate()
