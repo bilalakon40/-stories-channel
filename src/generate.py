@@ -1,9 +1,11 @@
-import requests
+import json
+import urllib.request
+import urllib.error
 
 from config import GROQ_URL, GROQ_KEY
 
 def generate():
-    body = {
+    body = json.dumps({
         "model": "llama-3.3-70b-versatile",
         "messages": [
             {"role": "system", "content": "أنت كاتب قصص عربي محترف. تكتب قصصاً قصيرة مؤثرة بالعربية الفصحى. كل قصة تحمل حكمة أو عبرة."},
@@ -21,13 +23,19 @@ def generate():
         ],
         "temperature": 0.8,
         "max_tokens": 1000,
-    }
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {GROQ_KEY}",
-    }
-    resp = requests.post(GROQ_URL, json=body, headers=headers, timeout=60)
-    if resp.status_code != 200:
-        raise Exception(f"Groq API error {resp.status_code}: {resp.text[:300]}")
-    data = resp.json()
-    return data["choices"][0]["message"]["content"]
+    })
+    req = urllib.request.Request(
+        GROQ_URL,
+        data=body.encode(),
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {GROQ_KEY}",
+        },
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            data = json.loads(resp.read())
+        return data["choices"][0]["message"]["content"]
+    except urllib.error.HTTPError as e:
+        error_body = e.read().decode()
+        raise Exception(f"HTTP {e.code}: {error_body[:300]}")
