@@ -25,7 +25,7 @@ jobs:
           RESP=$(curl -s -w "\n%{http_code}" https://api.groq.com/openai/v1/chat/completions \
             -H "Authorization: Bearer $GROQ_API_KEY" \
             -H "Content-Type: application/json" \
-            -d '{"model":"llama-3.3-70b-versatile","messages":[{"role":"user","content":"hi"}],"max_tokens":5}')
+            -d '{"model":"llama3-70b-8192","messages":[{"role":"user","content":"hi"}],"max_tokens":5}')
           CODE=$(echo "$RESP" | tail -1)
           BODY=$(echo "$RESP" | head -n -1)
           echo "HTTP: $CODE"

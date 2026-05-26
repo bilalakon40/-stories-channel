@@ -6,7 +6,7 @@ from config import GROQ_URL, GROQ_KEY
 
 def generate():
     body = json.dumps({
-        "model": "llama-3.3-70b-versatile",
+        "model": "llama3-70b-8192",
         "messages": [
             {"role": "system", "content": "أنت كاتب قصص عربي محترف. تكتب قصصاً قصيرة مؤثرة بالعربية الفصحى. كل قصة تحمل حكمة أو عبرة."},
             {"role": "user", "content": """اكتب قصة قصيرة بالعربية الفصحى فيها عبرة وحكمة.
