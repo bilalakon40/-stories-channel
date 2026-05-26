@@ -18,12 +18,18 @@ jobs:
           python-version: "3.11"
       - name: اختبار Groq API
         run: |
-          CODE=$(curl -s -o /dev/null -w "%{http_code}" https://api.groq.com/openai/v1/chat/completions \
+          echo "أول 10 حروف: ${GROQ_API_KEY:0:10}..."
+          echo "الطول: ${#GROQ_API_KEY}"
+          echo "---"
+          echo "اختبار الاتصال..."
+          RESP=$(curl -s -w "\n%{http_code}" https://api.groq.com/openai/v1/chat/completions \
             -H "Authorization: Bearer $GROQ_API_KEY" \
             -H "Content-Type: application/json" \
             -d '{"model":"llama-3.3-70b-versatile","messages":[{"role":"user","content":"hi"}],"max_tokens":5}')
-          echo "HTTP Code: $CODE"
-          if [ "$CODE" != "200" ]; then echo "❌ المفتاح خطأ"; else echo "✅ المفتاح صحيح"; fi
+          CODE=$(echo "$RESP" | tail -1)
+          BODY=$(echo "$RESP" | head -n -1)
+          echo "HTTP: $CODE"
+          echo "رد: $BODY"
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
       - run: pip install -r requirements.txt
